@@ -118,12 +118,16 @@ def lambda_handler(event, context):
         print("Bedrock response:", json.dumps(response_body, default=str))
         
         # 応答の検証
-        if not response_body.get('output') or not response_body['output'].get('message') or not response_body['output']['message'].get('content'):
-            raise Exception("No response content from the model")
+        # if not response_body.get('output') or not response_body['output'].get('message') or not response_body['output']['message'].get('content'):
+        #     raise Exception("No response content from the model")
+        if response_body is None:
+            raise Exception("No 'generated_text' found in the response")
         
         # アシスタントの応答を取得
-        assistant_response = response_body['output']['message']['content'][0]['text']
-        
+        # assistant_response = response_body['output']['message']['content'][0]['text']
+        assistant_response = response_body
+
+
         # アシスタントの応答を会話履歴に追加
         messages.append({
             "role": "assistant",
