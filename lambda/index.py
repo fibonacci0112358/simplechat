@@ -83,14 +83,23 @@ def lambda_handler(event, context):
         # }
 
         # fastapi用のリクエストペイロード
+        # request_payload = {
+        #     "prompt": "\n".join([msg["content"][0]["text"] for msg in bedrock_messages if "content" in msg and msg["content"]]),
+        #     "max_new_tokens": 512,
+        #     "temperature": 0.7,
+        #     "top_p": 0.9,
+        #     "do_sample": True
+        # }
+        
+        # 履歴を参照しない単純な実装に変更
         request_payload = {
-            "prompt": "\n".join([msg["content"][0]["text"] for msg in bedrock_messages if "content" in msg and msg["content"]]),
+            "prompt": message,
             "max_new_tokens": 512,
             "temperature": 0.7,
             "top_p": 0.9,
             "do_sample": True
         }
-        
+
         print("Calling Bedrock invoke_model API with payload:", json.dumps(request_payload))
         
         # invoke_model APIを呼び出し
