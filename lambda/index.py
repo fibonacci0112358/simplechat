@@ -20,7 +20,7 @@ bedrock_client = None
 # モデルID　
 # MODEL_ID = os.environ.get("MODEL_ID", "us.amazon.nova-lite-v1:0")
 # FASTAPIのURLの指定　colabでの起動ごとにURLが変わるので注意
-MODEL_ID = "https://b8f6-34-83-98-90.ngrok-free.app/"
+MODEL_ID = "https://002d-34-83-98-90.ngrok-free.app/"
 
 def lambda_handler(event, context):
     try:
@@ -105,13 +105,16 @@ def lambda_handler(event, context):
         header = {
             "Content-Type": "application/json",
         }
-        response = urllib.request.Request(url, data=json.dumps(request_payload).encode('utf-8'), headers=header)
-        response = response.json()
+        req = urllib.request.Request(url, data=json.dumps(request_payload).encode('utf-8'), headers=header)
 
+        with urllib.request.urlopen(req) as response:
+            # レスポンスをJSONとして読み取り
+            full_response = json.loads(response.read().decode('utf-8'))
+            # 'generated_text'キーのみを抽出
+            response_body = full_response.get('generated_text', None)
         
         # レスポンスを解析 
         # response_body = json.loads(response['body'].read())
-        response_body = json.loads(response['generated_text'].read())
         print("Bedrock response:", json.dumps(response_body, default=str))
         
         # 応答の検証
