@@ -90,7 +90,7 @@ def lambda_handler(event, context):
         #     "top_p": 0.9,
         #     "do_sample": True
         # }
-        
+
         # 履歴を参照しない単純な実装に変更
         request_payload = {
             "prompt": message,
@@ -114,7 +114,7 @@ def lambda_handler(event, context):
         header = {
             "Content-Type": "application/json",
         }
-        req = urllib.request.Request(url, data=json.dumps(request_payload).encode('utf-8'), headers=header)
+        req = urllib.request.Request(url, data=json.dumps(request_payload, ensure_ascii=False).encode('utf-8'), headers=header)
 
         with urllib.request.urlopen(req) as response:
             # レスポンスをJSONとして読み取り
